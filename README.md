@@ -1,26 +1,99 @@
-# Adaptive Battery Monitor Website
+# 🔋 Adaptive Battery Cell Voltage Monitoring Controller
 
-## Run in VS Code
+A scenario-aware **Adaptive Battery Cell Voltage Monitoring Controller** designed to overcome the limitations of fixed-threshold battery voltage monitoring.
 
-1. Create a folder named `adaptive-battery-monitor`.
-2. Put these files inside:
-   - `index.html`
-   - `style.css`
-   - `script.js`
-3. Open the folder in VS Code.
-4. Install the **Live Server** extension by Ritwick Dey.
-5. Right-click `index.html` and select **Open with Live Server**.
+This project combines **RTL design, adaptive threshold control, and verification concepts** with a web-based dashboard for visualizing battery operating conditions.
 
-You can also open `index.html` directly in a browser.
+---
 
-## What this demo shows
+## 📌 Project Overview
 
-- Battery cell voltage
-- Dynamic adaptive thresholds
-- Normal / Charging / Low Power / Fault Test modes
-- Under-voltage and over-voltage detection
-- Verification focus: UVM, constrained-random, functional coverage, cross coverage
-- Conceptual RTL monitoring flow
-- Simulation log for a project/demo presentation
+Conventional battery voltage monitoring systems generally use fixed voltage thresholds to detect under-voltage and over-voltage conditions.
 
-This is a front-end demonstration of the RTL concept. It does not execute the actual SystemVerilog DUT in the browser.
+However, battery operating conditions can change depending on the operating mode. A fixed threshold may therefore fail to detect certain early voltage transitions or abnormal conditions.
+
+This project proposes an **Adaptive Voltage Threshold Controller** that dynamically selects voltage thresholds according to the battery's operating mode.
+
+The project also focuses on verification using:
+
+- UVM
+- Constrained-Random Verification
+- Functional Coverage
+- Cross Coverage
+
+---
+
+## 🎯 Problem Statement
+
+Fixed-threshold voltage monitors may fail to detect early **over-voltage and under-voltage conditions** when the battery operates under different modes.
+
+Additionally, conventional directed testing may miss important **adaptive threshold transitions** during verification.
+
+### The project addresses these issues by providing:
+
+- Dynamic voltage threshold selection
+- Operating-mode-aware monitoring
+- Under-voltage detection
+- Over-voltage detection
+- Adaptive threshold transition monitoring
+- Comprehensive RTL verification
+
+---
+
+## 💡 Proposed RTL Innovation
+
+The main innovation is an:
+
+### Adaptive Voltage Threshold Controller
+
+Instead of using one fixed voltage threshold, the controller dynamically selects the appropriate voltage limits based on the selected operating mode.
+
+### Example Operating Modes
+
+| Operating Mode | Under-Voltage | Over-Voltage |
+|---------------|---------------:|-------------:|
+| Normal        | 3.00 V         | 4.20 V       |
+| Charging      | 3.10 V         | 4.25 V       |
+| Low Power     | 3.20 V         | 4.10 V       |
+| Fault Test    | 3.55 V         | 3.85 V       |
+
+> **Note:** The threshold values above are demonstration values used by the web dashboard. The actual SystemVerilog design should use the thresholds defined in the final RTL specification.
+
+---
+
+# 🏗️ System Architecture
+
+```text
+                 Battery Cell Voltage
+                          │
+                          ▼
+                ┌──────────────────┐
+                │   Voltage Input  │
+                │    / ADC Data    │
+                └────────┬─────────┘
+                         │
+                         ▼
+                ┌──────────────────┐
+                │   Mode Detector  │
+                │                  │
+                │ Normal           │
+                │ Charging         │
+                │ Low Power        │
+                │ Fault Test       │
+                └────────┬─────────┘
+                         │
+                         ▼
+              ┌──────────────────────┐
+              │ Adaptive Threshold   │
+              │     Controller       │
+              └──────────┬───────────┘
+                         │
+                         ▼
+                ┌──────────────────┐
+                │    Comparator    │
+                └────────┬─────────┘
+                         │
+              ┌──────────┼──────────┐
+              │          │          │
+              ▼          ▼          ▼
+        Under-Voltage   Normal   Over-Voltage
