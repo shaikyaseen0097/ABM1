@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adaptive Battery Cell Voltage Monitoring Controller</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="chip">RTL</div>
+      <div>
+        <h1>Adaptive Battery Monitor</h1>
+        <p>Scenario-aware voltage monitoring controller</p>
+      </div>
+    </div>
+    <div class="top-status">
+      <span class="status-dot"></span>
+      Simulation Online
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <span class="eyebrow">DUT • ADAPTIVE BATTERY CELL VOLTAGE MONITORING CONTROLLER</span>
+        <h2>Adaptive threshold monitoring for changing battery operating modes.</h2>
+        <p>
+          A web-based demonstration of the RTL concept: the voltage threshold changes
+          dynamically according to the selected battery operating mode, helping detect
+          over-voltage, under-voltage, and adaptive threshold transitions.
+        </p>
+        <button class="primary-btn" id="simulateBtn">Run Simulation</button>
+      </div>
+      <div class="hero-chip">
+        <div class="chip-label">Current Mode</div>
+        <div class="hero-mode" id="heroMode">NORMAL</div>
+        <div class="hero-voltage"><span id="heroVoltage">3.70</span> V</div>
+      </div>
+    </section>
+
+    <section class="grid four">
+      <article class="card">
+        <div class="card-title">Battery Voltage</div>
+        <div class="metric" id="voltageMetric">3.70 V</div>
+        <div class="progress"><div id="voltageBar" class="progress-fill"></div></div>
+        <small>Live simulated cell voltage</small>
+      </article>
+
+      <article class="card">
+        <div class="card-title">Adaptive Threshold</div>
+        <div class="metric" id="thresholdMetric">3.60 V</div>
+        <div class="threshold-row">
+          <span>Under</span><b id="underThreshold">3.00 V</b>
+          <span>Over</span><b id="overThreshold">4.20 V</b>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-title">Monitoring State</div>
+        <div class="metric state-normal" id="stateMetric">NORMAL</div>
+        <small id="stateText">Voltage is within the selected operating limits.</small>
+      </article>
+
+      <article class="card">
+        <div class="card-title">Verification Coverage</div>
+        <div class="metric" id="coverageMetric">92%</div>
+        <div class="progress"><div id="coverageBar" class="progress-fill coverage"></div></div>
+        <small>Functional + constrained-random + cross coverage</small>
+      </article>
+    </section>
+
+    <section class="grid two">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <h3>Operating Mode Controller</h3>
+            <p>Change the scenario to update the adaptive threshold.</p>
+          </div>
+          <span class="badge" id="modeBadge">NORMAL</span>
+        </div>
+
+        <div class="mode-buttons">
+          <button class="mode-btn active" data-mode="normal">Normal</button>
+          <button class="mode-btn" data-mode="charging">Charging</button>
+          <button class="mode-btn" data-mode="lowPower">Low Power</button>
+          <button class="mode-btn" data-mode="fault">Fault Test</button>
+        </div>
+
+        <div class="control-box">
+          <label for="voltageSlider">Input Cell Voltage</label>
+          <div class="slider-line">
+            <input id="voltageSlider" type="range" min="2.5" max="4.5" step="0.01" value="3.70" />
+            <output id="sliderValue">3.70 V</output>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <h3>Verification Focus</h3>
+            <p>Test-oriented view of the proposed RTL.</p>
+          </div>
+          <span class="badge purple">UVM</span>
+        </div>
+
+        <div class="verify-list">
+          <div class="verify-item">
+            <span>UVM Environment</span>
+            <b class="ok">PASS</b>
+          </div>
+          <div class="verify-item">
+            <span>Constrained Random</span>
+            <b class="ok">PASS</b>
+          </div>
+          <div class="verify-item">
+            <span>Functional Coverage</span>
+            <b class="ok">94%</b>
+          </div>
+          <div class="verify-item">
+            <span>Cross Coverage</span>
+            <b class="ok">90%</b>
+          </div>
+          <div class="verify-item">
+            <span>Adaptive Threshold Transition</span>
+            <b class="warn" id="transitionStatus">READY</b>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel architecture">
+      <div class="panel-head">
+        <div>
+          <h3>RTL Monitoring Flow</h3>
+          <p>Conceptual signal flow represented as a web dashboard.</p>
+        </div>
+      </div>
+
+      <div class="flow">
+        <div class="flow-box">
+          <span>01</span>
+          <strong>Voltage Input</strong>
+          <small>Cell sensor / ADC value</small>
+        </div>
+        <div class="arrow">→</div>
+        <div class="flow-box">
+          <span>02</span>
+          <strong>Mode Detector</strong>
+          <small>Normal / Charge / Low Power</small>
+        </div>
+        <div class="arrow">→</div>
+        <div class="flow-box active-box">
+          <span>03</span>
+          <strong>Adaptive Threshold</strong>
+          <small>Dynamic operating limit</small>
+        </div>
+        <div class="arrow">→</div>
+        <div class="flow-box">
+          <span>04</span>
+          <strong>Comparator</strong>
+          <small>Under / Normal / Over</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid two">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <h3>Integrated Problem Addressed</h3>
+          </div>
+        </div>
+        <p class="problem-text">
+          Fixed-threshold voltage monitors can fail to detect early over-voltage or
+          under-voltage conditions when the battery operates under different modes.
+          Conventional directed tests can also miss adaptive threshold transitions.
+        </p>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <h3>Proposed RTL Innovation</h3>
+          </div>
+        </div>
+        <p class="problem-text">
+          An adaptive voltage threshold controller dynamically selects monitoring
+          limits according to the current operating mode, improving scenario-aware
+          detection and making threshold transitions explicit for verification.
+        </p>
+      </article>
+    </section>
+
+    <section class="panel log-panel">
+      <div class="panel-head">
+        <div>
+          <h3>Simulation Log</h3>
+          <p>Useful for demonstrating your project during review or presentation.</p>
+        </div>
+        <button class="small-btn" id="clearLog">Clear</button>
+      </div>
+      <div id="log" class="log"></div>
+    </section>
+  </main>
+
+  <footer>
+    Adaptive Battery Cell Voltage Monitoring Controller • RTL + Verification Demonstrator
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
